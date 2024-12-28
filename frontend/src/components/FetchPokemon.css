@@ -1,0 +1,166 @@
+/* Pokémon Container */
+/* Header Section */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .logo {
+    width: 120px;
+    height: auto;
+  }
+  
+  .search-filter {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .search-bar {
+    padding: 5px 10px;
+  }
+  
+  .filter-select {
+    padding: 5px;
+  }
+.pokemon-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 5px;
+  }
+  
+  /* Pokémon Grid */
+  .pokemon-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Three Pokémon per row */
+    gap: 20px;
+  }
+  
+  /* Pokémon Card */
+  .pokemon-card {
+    background-color: #f8f9fa;
+    border: 2px solid #ddd;
+    border-radius: 15px;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .pokemon-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .pokemon-image-container {
+    margin-bottom: 10px;
+  }
+  
+  .pokemon-image {
+    width: 120px;
+    height: auto;
+  }
+  
+  .pokemon-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  
+  /* Pokémon Actions */
+  .pokemon-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .favorite-btn,
+  .details-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .favorite-btn.favorited {
+    background-color: #f44336;
+  }
+  
+  .favorite-btn:hover {
+    background-color: #388e3c;
+  }
+  
+  .details-btn:hover {
+    background-color: #388e3c;
+  }
+  
+  /* Pagination Buttons */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .pagination-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 0 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .pagination-btn:hover {
+    background-color: #388e3c;
+  }
+  
+  .pagination-btn:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+  
+  /* Details Modal */
+  .details-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  
+  .details-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+  }
+  
+  .close-details {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .close-details:hover {
+    background-color: #d32f2f;
+  }

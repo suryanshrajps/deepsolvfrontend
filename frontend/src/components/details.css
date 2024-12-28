@@ -1,0 +1,85 @@
+pokemon-detail {  
+    position: fixed;  
+    top: 0;  
+    left: 0;  
+    right: 0;  
+    bottom: 0;  
+    background-color: rgba(0, 128, 0, 0.9);  
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    z-index: 1000;  
+    padding: 20px;  
+}  
+
+.detail-content {  
+    background: #FFFFFF;  
+    color: #333;  
+    border-radius: 10px;  
+    padding: 20px;  
+    width: 80%;  
+    max-width: 600px;  
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);  
+}  
+
+.pokemon-info {  
+    display: flex;  
+    align-items: center;  
+    margin-bottom: 20px;  
+}  
+
+.pokemon-image {  
+    width: 150px;  
+    height: auto;  
+    margin-right: 20px;  
+}  
+
+.pokemon-name {  
+    font-size: 2rem;  
+    font-weight: bold;  
+}  
+
+.pokemon-type {  
+    font-size: 1rem;  
+    text-transform: capitalize;  
+    color: #666;  
+}  
+
+.pokemon-number {  
+    font-size: 1.25rem;  
+}  
+
+.stats {  
+    margin-top: 20px;  
+}  
+
+.stat {  
+    display: flex;  
+    align-items: center;  
+    margin: 10px 0;  
+}  
+
+.progress-bar {  
+    flex: 1;  
+    background: #e0e0e0;  
+    border-radius: 5px;  
+    overflow: hidden;  
+    height: 10px;  
+    margin: 0 10px;  
+}  
+
+.progress {  
+    background: #4caf50;  
+    height: 100%;  
+    border-radius: 5px;  
+}  
+
+.close-btn {  
+    position: absolute;  
+    top: 10px;  
+    right: 10px;  
+    background: transparent;  
+    border: none;  
+    font-size: 1.5rem;  
+    cursor: pointer;  
+}
