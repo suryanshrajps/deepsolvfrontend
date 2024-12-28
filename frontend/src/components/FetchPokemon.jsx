@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';  
 import axios from 'axios';  
-import './FetchPokemon.css';  
-import './details.css'; // New CSS for detail view styling  
+import './FetchPokemon.css'; // Ensure to import your CSS for styling  
+import logo from './imagespoke.png'; // Adjust the path based on your file structure  
 
 const FetchPokemon = () => {  
     const [pokemonList, setPokemonList] = useState([]);  
@@ -10,12 +10,16 @@ const FetchPokemon = () => {
     const [error, setError] = useState(null);  
     const [search, setSearch] = useState('');  
     const [selectedType, setSelectedType] = useState('');  
-    const [page, setPage] = useState(1);  
-    const [favorites, setFavorites] = useState(() => JSON.parse(localStorage.getItem('favorites')) || []);  
+    const [favorites, setFavorites] = useState(() =>  
+        JSON.parse(localStorage.getItem('favorites')) || []  
+    );  
     const [selectedPokemon, setSelectedPokemon] = useState(null);  
     const [detailViewActive, setDetailViewActive] = useState(false);  
+    
+    const ITEMS_PER_PAGE = 9;  
+    const [currentPage, setCurrentPage] = useState(1);  
+    const [totalPokemon, setTotalPokemon] = useState(0);  
 
-    const ITEMS_PER_PAGE = 20;  
     const API_BASE_URL = 'https://pokeapi.co/api/v2';  
 
     useEffect(() => {  
@@ -24,11 +28,13 @@ const FetchPokemon = () => {
             setError(null);  
 
             try {  
-                const offset = (page - 1) * ITEMS_PER_PAGE;  
-                const response = await axios.get(`${API_BASE_URL}/pokemon?offset=${offset}&limit=${ITEMS_PER_PAGE}`);  
-
+                const response = await axios.get(`${API_BASE_URL}/pokemon?limit=1000`);  
+                setTotalPokemon(response.data.count);  
+                const offset = (currentPage - 1) * ITEMS_PER_PAGE;  
+                const paginatedResponse = await axios.get(`${API_BASE_URL}/pokemon?limit=${ITEMS_PER_PAGE}&offset=${offset}`);  
+                
                 const detailedData = await Promise.all(  
-                    response.data.results.map(async (pokemon) => {  
+                    paginatedResponse.data.results.map(async (pokemon) => {  
                         const details = await axios.get(pokemon.url);  
                         return {  
                             id: details.data.id,  
@@ -37,8 +43,8 @@ const FetchPokemon = () => {
                             types: details.data.types.map((type) => type.type.name),  
                             stats: details.data.stats,  
                             abilities: details.data.abilities,  
-                            height: details.data.height, // Height in decimeters  
-                            weight: details.data.weight, // Weight in hectograms  
+                            height: details.data.height,  
+                            weight: details.data.weight,  
                         };  
                     })  
                 );  
@@ -53,7 +59,7 @@ const FetchPokemon = () => {
         };  
 
         fetchData();  
-    }, [page]);  
+    }, [currentPage]);  
 
     useEffect(() => {  
         localStorage.setItem('favorites', JSON.stringify(favorites));  
@@ -73,7 +79,9 @@ const FetchPokemon = () => {
         let filtered = pokemonList;  
 
         if (searchTerm) {  
-            filtered = filtered.filter((pokemon) => pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()));  
+            filtered = filtered.filter((pokemon) =>   
+                pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())  
+            );  
         }  
 
         if (typeFilter) {  
@@ -103,10 +111,22 @@ const FetchPokemon = () => {
         setTimeout(() => setSelectedPokemon(null), 300);  
     };  
 
+    const handleNextPage = () => {  
+        if ((currentPage * ITEMS_PER_PAGE) < totalPokemon) {  
+            setCurrentPage(prev => prev + 1);  
+        }  
+    };  
+
+    const handlePreviousPage = () => {  
+        if (currentPage > 1) {  
+            setCurrentPage(prev => prev - 1);  
+        }  
+    };  
+
     return (  
         <div className="fetch-pokemon">  
             <header>  
-                <h1>Pokémon List</h1>  
+                <img src={logo} alt="Pokémon Logo" className="logo" /> {/* Logo instead of text heading */}  
                 <div className="filters">  
                     <input  
                         type="text"  
@@ -120,7 +140,6 @@ const FetchPokemon = () => {
                         <option value="water">Water</option>  
                         <option value="grass">Grass</option>  
                         <option value="electric">Electric</option>  
-                        {/* Add more types as needed */}  
                     </select>  
                 </div>  
             </header>  
@@ -130,7 +149,11 @@ const FetchPokemon = () => {
 
             <div className="pokemon-grid">  
                 {filteredPokemon.map((pokemon) => (  
-                    <div key={pokemon.id} className="pokemon-card" style={{ animationDelay: `${pokemon.id * 50}ms` }}>  
+                    <div  
+                        key={pokemon.id}  
+                        className="pokemon-card"  
+                        style={{ animationDelay: `${pokemon.id * 50}ms` }}  
+                    >  
                         <img src={pokemon.image} alt={pokemon.name} />  
                         <h3>{pokemon.name}</h3>  
                         <p>Type: {pokemon.types.join(', ')}</p>  
@@ -142,11 +165,15 @@ const FetchPokemon = () => {
                 ))}  
             </div>  
 
+            {/* Pagination Controls */}  
             <div className="pagination">  
-                <button disabled={page === 1} onClick={() => setPage(page - 1)}>  
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>  
                     Previous  
                 </button>  
-                <button onClick={() => setPage(page + 1)}>Next</button>  
+                <span>Page {currentPage}</span>  
+                <button onClick={handleNextPage} disabled={(currentPage * ITEMS_PER_PAGE) >= totalPokemon}>  
+                    Next  
+                </button>  
             </div>  
 
             {selectedPokemon && (  
@@ -172,7 +199,7 @@ const FetchPokemon = () => {
                                     <div className="progress-bar">  
                                         <div  
                                             className="progress"  
-                                            style={{ width: `${stat.base_stat / 2}%` }} // Adjust bar length based on stat value  
+                                            style={{ width: `${stat.base_stat / 2}%` }}  
                                         ></div>  
                                     </div>  
                                     <span>{stat.base_stat}</span>  
